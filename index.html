@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAPtool</title>
+    <style>
+        /* ============================================
+           主题变量 —— 深色主题 (默认)
+           ============================================ */
+        :root {
+            --bg-body-start: #0b1a2a;
+            --bg-body-end: #1c2e42;
+            --bg-container: rgba(18, 30, 45, 0.85);
+            --bg-viewport: #0e1620;
+            --bg-canvas-wrapper: #121e2b;
+            --bg-canvas: #1a2737;
+            --bg-upload: #0d1a28aa;
+            --bg-upload-hover: #142b40aa;
+            --bg-controls: #142433cc;
+            --bg-info-bar: #0d1a28aa;
+            --bg-thumbnail-strip: #0d1a28aa;
+            --bg-input: #1f3143;
+            --bg-fps-value: #0d1f2e;
+            --bg-button: #1d3145;
+            --bg-button-hover: #254762;
+            --bg-button-active: #1a2e42;
+            --bg-button-primary: #136b9e;
+            --bg-button-primary-hover: #1a82c0;
+            --bg-button-danger: #7a2e3a;
+            --bg-button-danger-hover: #9e3a48;
+            --bg-dot: #2a4057;
+            --bg-dot-hover: #557ea0;
+            --bg-dot-active: #55bbff;
+            --bg-fullscreen: #000000ee;
+            --bg-fullscreen-controls: rgba(10, 22, 35, 0.9);
+            --bg-fullscreen-canvas: #0a121c;
+            --bg-fullscreen-info: rgba(10, 22, 35, 0.8);
+            --bg-fullscreen-close: rgba(20, 40, 60, 0.85);
+            --bg-fullscreen-close-hover: #b03a4a;
+            --bg-progress: #0a1622;
+            --bg-fullscreen-btn: rgba(0, 15, 30, 0.75);
+            --bg-fullscreen-btn-hover: #1a82c0;
+            --bg-frame-badge: rgba(0, 15, 30, 0.8);
+            --bg-modal: rgba(10, 22, 35, 0.95);
+            --bg-modal-item: rgba(30, 50, 75, 0.6);
+            --bg-modal-item-hover: rgba(45, 75, 110, 0.8);
+            --bg-overlay: rgba(0, 0, 0, 0.75);
+            --bg-zoom-btn: rgba(30, 50, 75, 0.9);
+            --bg-zoom-btn-hover: rgba(45, 75, 110, 0.95);
+
+            --text-primary: #e2efff;
+            --text-secondary: #9bb8da;
+            --text-tertiary: #5a7d9e;
+            --text-muted: #4f6d8c;
+            --text-value: #b1dcff;
+            --text-fps: #d0e8ff;
+            --text-frame-badge: #b8e2ff;
+            --text-info: #9bb8da;
+            --text-upload-hint: #5a7d9e;
+            --text-upload-strong: #b1dcff;
+
+            --border-container: rgba(90, 170, 255, 0.25);
+            --border-viewport: #2b4b6e;
+            --border-canvas-1: #1f3e5c;
+            --border-canvas-2: #0d1b26;
+            --border-upload: #3a6186;
+            --border-upload-hover: #6db3f2;
+            --border-controls: #2e5177;
+            --border-info-bar: #2e5177;
+            --border-thumbnail-strip: #2e5177;
+            --border-input: #2f4b68;
+            --border-fps-value: #3d6488;
+            --border-button: #3b6188;
+            --border-button-hover: #5b8fc9;
+            --border-button-primary: #5fa9e0;
+            --border-button-danger: #b05565;
+            --border-dot: #466a8b;
+            --border-dot-active: #b1e0ff;
+            --border-fullscreen-controls: #3b6188;
+            --border-fullscreen-close: #4a7ba6;
+            --border-fullscreen-info: #3b6188;
+            --border-fullscreen-btn: #4a7ba6;
+            --border-modal: #3b6188;
+            --border-modal-item: #3b6188;
+            --border-zoom-btn: #4a7ba6;
+
+            --shadow-container: 0 30px 45px -15px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.08);
+            --shadow-viewport: inset 0 0 20px #00000055, 0 20px 30px -10px #000000aa;
+            --shadow-canvas-wrapper: 0 0 0 2px var(--border-canvas-1), 0 0 0 4px var(--border-canvas-2);
+            --shadow-controls: 0 8px 18px #00000033, inset 0 1px 0 #ffffff0d;
+            --shadow-button: 0 4px 8px #00000033, inset 0 1px 1px #ffffff1a;
+            --shadow-button-hover: 0 8px 14px #00000055, inset 0 1px 2px #ffffff33;
+            --shadow-button-active: 0 2px 4px #00000055, inset 0 2px 4px #00000055;
+            --shadow-button-primary: 0 4px 12px #0a4b7a, inset 0 1px 1px #ffffff66;
+            --shadow-frame-badge: 0 4px 10px #00000055;
+            --shadow-dot-active: 0 0 12px #2f9eff, 0 0 4px #b1e0ff;
+            --shadow-dot: 0 1px 3px #00000055;
+            --shadow-input-inset: inset 0 1px 5px #00000088;
+            --shadow-fullscreen-controls: 0 8px 30px #000000aa, inset 0 1px 0 #ffffff1a;
+            --shadow-fullscreen-close: 0 4px 15px #000000aa;
+            --shadow-fullscreen-btn: 0 4px 12px #00000066;
+            --shadow-fullscreen-btn-hover: 0 6px 18px #2f9eff88;
+            --shadow-fps-thumb: 0 2px 8px #000000aa, 0 0 0 2px #0f1e2c;
+            --shadow-modal: 0 30px 80px -20px rgba(0, 0, 0, 0.95), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            --shadow-zoom-btn: 0 4px 12px #00000055;
+
+            --gradient-progress: linear-gradient(90deg, #136b9e, #55bbff, #b1e0ff);
+            --shadow-progress-glow: 0 0 10px #55bbff;
+            --shadow-fullscreen-canvas: 0 0 60px #2f9eff33, 0 0 120px #000000aa;
+
+            --backdrop-blur: blur(12px);
+        }
+
+        /* ============================================
+           浅色主题
+           ============================================ */
+        [data-theme="light"] {
+            --bg-body-start: #e8eef5;
+            --bg-body-end: #d0dbe8;
+            --bg-container: rgba(255, 255, 255, 0.92);
+            --bg-viewport: #eef3f9;
+            --bg-canvas-wrapper: #ffffff;
+            --bg-canvas: #f5f8fc;
+            --bg-upload: #f0f5faaa;
+            --bg-upload-hover: #e2ecf5aa;
+            --bg-controls: rgba(255, 255, 255, 0.85);
+            --bg-info-bar: rgba(255, 255, 255, 0.85);
+            --bg-thumbnail-strip: rgba(255, 255, 255, 0.85);
+            --bg-input: #dfe7f0;
+            --bg-fps-value: #ffffff;
+            --bg-button: #ffffff;
+            --bg-button-hover: #e8f0fa;
+            --bg-button-active: #d8e4f0;
+            --bg-button-primary: #2b7fc4;
+            --bg-button-primary-hover: #1f6fb0;
+            --bg-button-danger: #d9534f;
+            --bg-button-danger-hover: #c9302c;
+            --bg-dot: #c8d6e5;
+            --bg-dot-hover: #9ab5d0;
+            --bg-dot-active: #2b7fc4;
+            --bg-fullscreen: #f0f4f9ee;
+            --bg-fullscreen-controls: rgba(255, 255, 255, 0.95);
+            --bg-fullscreen-canvas: #ffffff;
+            --bg-fullscreen-info: rgba(255, 255, 255, 0.9);
+            --bg-fullscreen-close: rgba(255, 255, 255, 0.9);
+            --bg-fullscreen-close-hover: #d9534f;
+            --bg-progress: #d0dbe8;
+            --bg-fullscreen-btn: rgba(255, 255, 255, 0.85);
+            --bg-fullscreen-btn-hover: #2b7fc4;
+            --bg-frame-badge: rgba(255, 255, 255, 0.9);
+            --bg-modal: rgba(255, 255, 255, 0.98);
+            --bg-modal-item: rgba(240, 245, 250, 0.9);
+            --bg-modal-item-hover: rgba(225, 235, 245, 0.95);
+            --bg-overlay: rgba(100, 130, 160, 0.5);
+            --bg-zoom-btn: rgba(255, 255, 255, 0.95);
+            --bg-zoom-btn-hover: rgba(232, 240, 250, 0.98);
+
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a6a8a;
+            --text-tertiary: #7a9ab8;
+            --text-muted: #8a9aaa;
+            --text-value: #1f5f9f;
+            --text-fps: #1a2a3a;
+            --text-frame-badge: #1f5f9f;
+            --text-info: #4a6a8a;
+            --text-upload-hint: #7a9ab8;
+            --text-upload-strong: #2b7fc4;
+
+            --border-container: rgba(43, 127, 196, 0.3);
+            --border-viewport: #c8d6e5;
+            --border-canvas-1: #d0dbe8;
+            --border-canvas-2: #b8c8d8;
+            --border-upload: #b8c8d8;
+            --border-upload-hover: #2b7fc4;
+            --border-controls: #c8d6e5;
+            --border-info-bar: #c8d6e5;
+            --border-thumbnail-strip: #c8d6e5;
+            --border-input: #c8d6e5;
+            --border-fps-value: #c8d6e5;
+            --border-button: #c8d6e5;
+            --border-button-hover: #9ab5d0;
+            --border-button-primary: #1f6fb0;
+            --border-button-danger: #c9302c;
+            --border-dot: #b8c8d8;
+            --border-dot-active: #1f5f9f;
+            --border-fullscreen-controls: #c8d6e5;
+            --border-fullscreen-close: #c8d6e5;
+            --border-fullscreen-info: #c8d6e5;
+            --border-fullscreen-btn: #b8c8d8;
+            --border-modal: #c8d6e5;
+            --border-modal-item: #c8d6e5;
+            --border-zoom-btn: #c8d6e5;
+
+            --shadow-container: 0 20px 40px -15px rgba(100, 130, 160, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            --shadow-viewport: inset 0 0 20px #b8c8d844, 0 15px 25px -10px #8a9aaa44;
+            --shadow-canvas-wrapper: 0 0 0 2px var(--border-canvas-1), 0 0 0 4px var(--border-canvas-2);
+            --shadow-controls: 0 4px 12px #8a9aaa22, inset 0 1px 0 #ffffffcc;
+            --shadow-button: 0 2px 6px #8a9aaa22, inset 0 1px 1px #ffffffcc;
+            --shadow-button-hover: 0 6px 14px #8a9aaa33, inset 0 1px 2px #ffffffdd;
+            --shadow-button-active: 0 2px 4px #8a9aaa22, inset 0 2px 4px #8a9aaa33;
+            --shadow-button-primary: 0 4px 12px #2b7fc455, inset 0 1px 1px #ffffff88;
+            --shadow-frame-badge: 0 4px 10px #8a9aaa33;
+            --shadow-dot-active: 0 0 12px #2b7fc4, 0 0 4px #6db3f2;
+            --shadow-dot: 0 1px 3px #8a9aaa33;
+            --shadow-input-inset: inset 0 1px 5px #b8c8d866;
+            --shadow-fullscreen-controls: 0 8px 30px #8a9aaa55, inset 0 1px 0 #ffffffdd;
+            --shadow-fullscreen-close: 0 4px 15px #8a9aaa55;
+            --shadow-fullscreen-btn: 0 4px 12px #8a9aaa44;
+            --shadow-fullscreen-btn-hover: 0 6px 18px #2b7fc466;
+            --shadow-fps-thumb: 0 2px 8px #8a9aaa66, 0 0 0 2px #ffffff;
+            --shadow-modal: 0 20px 60px -15px rgba(100, 130, 160, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+            --shadow-zoom-btn: 0 4px 12px #8a9aaa44;
+
+            --gradient-progress: linear-gradient(90deg, #2b7fc4, #6db3f2, #b1e0ff);
+            --shadow-progress-glow: 0 0 10px #2b7fc4;
+            --shadow-fullscreen-canvas: 0 0 40px #2b7fc422, 0 0 80px #8a9aaa33;
+
+            --backdrop-blur: blur(16px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(145deg, var(--bg-body-start) 0%, var(--bg-body-end) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            padding: 16px;
+            margin: 0;
+            transition: background 0.4s ease;
+        }
+
+        .tool-container {
+            background: var(--bg-container);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 2rem;
+            padding: 24px 28px 28px 28px;
+            box-shadow: var(--shadow-container);
+            border: 1px solid var(--border-container);
+            max-width: 1400px;
+            width: fit-content;
+            margin: 0 auto;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .viewport {
+            background: var(--bg-viewport);
+            border-radius: 1.5rem;
+            padding: 18px;
+            box-shadow: var(--shadow-viewport);
+            border: 1px solid var(--border-viewport);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 420px;
+            position: relative;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            display: inline-block;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-canvas-wrapper);
+            background: var(--bg-canvas-wrapper);
+            line-height: 0;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        canvas {
+            display: block;
+            background: var(--bg-canvas);
+            transition: background 0.4s ease;
+        }
+
+        .fullscreen-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--bg-fullscreen-btn);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-fullscreen-btn);
+            color: var(--text-frame-badge);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 20;
+            box-shadow: var(--shadow-fullscreen-btn);
+            padding: 0;
+            min-width: 0;
+        }
+
+        .fullscreen-btn:hover:not(:disabled) {
+            background: var(--bg-fullscreen-btn-hover);
+            border-color: var(--border-upload-hover);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: var(--shadow-fullscreen-btn-hover);
+        }
+
+        .fullscreen-btn:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+
+        .frame-badge {
+            position: absolute;
+            bottom: 12px;
+            right: 16px;
+            background: var(--bg-frame-badge);
+            backdrop-filter: blur(5px);
+            padding: 6px 14px;
+            border-radius: 40px;
+            color: var(--text-frame-badge);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            border: 1px solid var(--border-button);
+            box-shadow: var(--shadow-frame-badge);
+            pointer-events: none;
+            font-variant-numeric: tabular-nums;
+            z-index: 10;
+            transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+        }
+
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 40px 30px;
+            border: 2px dashed var(--border-upload);
+            border-radius: 1.5rem;
+            background: var(--bg-upload);
+            transition: all 0.3s;
+            cursor: pointer;
+            min-width: 400px;
+            min-height: 300px;
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--border-upload-hover);
+            background: var(--bg-upload-hover);
+            box-shadow: 0 0 20px #2f9eff33;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            opacity: 0.7;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            text-align: center;
+            line-height: 1.6;
+            transition: color 0.4s ease;
+        }
+
+        .upload-text strong {
+            color: var(--text-upload-strong);
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            transition: color 0.4s ease;
+        }
+
+        .upload-hint {
+            color: var(--text-upload-hint);
+            font-size: 0.85rem;
+            margin-top: 4px;
+            transition: color 0.4s ease;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 14px 20px;
+            background: var(--bg-controls);
+            padding: 16px 22px;
+            border-radius: 3rem;
+            border: 1px solid var(--border-controls);
+            backdrop-filter: blur(5px);
+            box-shadow: var(--shadow-controls);
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            transition: color 0.4s ease;
+        }
+
+        button {
+            background: var(--bg-button);
+            border: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+            box-shadow: var(--shadow-button);
+            border: 1px solid var(--border-button);
+            letter-spacing: 0.3px;
+            min-width: 80px;
+            white-space: nowrap;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--bg-button-hover);
+            border-color: var(--border-button-hover);
+            box-shadow: var(--shadow-button-hover);
+            transform: translateY(-1px);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: var(--shadow-button-active);
+            background: var(--bg-button-active);
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+            transform: none;
+            box-shadow: 0 2px 4px #00000022;
+        }
+
+        button.primary {
+            background: var(--bg-button-primary);
+            border-color: var(--border-button-primary);
+            color: white;
+            box-shadow: var(--shadow-button-primary);
+        }
+
+        button.primary:hover:not(:disabled) {
+            background: var(--bg-button-primary-hover);
+        }
+
+        button.danger {
+            background: var(--bg-button-danger);
+            border-color: var(--border-button-danger);
+            color: white;
+        }
+
+        button.danger:hover:not(:disabled) {
+            background: var(--bg-button-danger-hover);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 130px;
+            height: 6px;
+            background: var(--bg-input);
+            border-radius: 10px;
+            box-shadow: var(--shadow-input-inset);
+            border: 1px solid var(--border-input);
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--bg-dot-active);
+            border-radius: 50%;
+            box-shadow: var(--shadow-fps-thumb);
+            border: 2px solid var(--text-value);
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: var(--bg-button-primary-hover);
+            transform: scale(1.1);
+        }
+
+        .fps-value {
+            color: var(--text-fps);
+            font-weight: 700;
+            font-size: 1rem;
+            min-width: 50px;
+            text-align: center;
+            background: var(--bg-fps-value);
+            padding: 4px 8px;
+            border-radius: 20px;
+            border: 1px solid var(--border-fps-value);
+            font-variant-numeric: tabular-nums;
+            transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+        }
+
+        .frame-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 700px;
+            max-height: 80px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--bg-dot);
+            border: 1px solid var(--border-dot);
+            transition: all 0.15s;
+            cursor: pointer;
+            box-shadow: var(--shadow-dot);
+            flex-shrink: 0;
+        }
+
+        .dot.active {
+            background: var(--bg-dot-active);
+            box-shadow: var(--shadow-dot-active);
+            border-color: var(--border-dot-active);
+            transform: scale(1.2);
+        }
+
+        .dot:hover {
+            background: var(--bg-dot-hover);
+        }
+
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            margin-bottom: 12px;
+            background: var(--bg-info-bar);
+            border-radius: 2rem;
+            border: 1px solid var(--border-info-bar);
+            color: var(--text-info);
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+            gap: 8px;
+            transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+        }
+
+        .info-bar span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-bar .value {
+            color: var(--text-value);
+            font-weight: 600;
+            transition: color 0.4s ease;
+        }
+
+        .thumbnail-strip {
+            display: none;
+            gap: 8px;
+            padding: 10px;
+            overflow-x: auto;
+            background: var(--bg-thumbnail-strip);
+            border-radius: 1rem;
+            border: 1px solid var(--border-thumbnail-strip);
+            margin-top: 14px;
+            max-width: 100%;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        .thumbnail-strip.visible {
+            display: flex;
+        }
+
+        .thumbnail-strip img {
+            width: 70px;
+            height: 46px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid var(--border-canvas-1);
+            cursor: pointer;
+            transition: all 0.15s;
+            flex-shrink: 0;
+            opacity: 0.7;
+        }
+
+        .thumbnail-strip img.active {
+            border-color: var(--bg-dot-active);
+            opacity: 1;
+            box-shadow: 0 0 10px var(--bg-dot-active);
+            transform: scale(1.05);
+        }
+
+        .thumbnail-strip img:hover {
+            opacity: 1;
+            border-color: var(--border-upload-hover);
+        }
+
+        .footer-hint {
+            text-align: center;
+            margin-top: 12px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            transition: color 0.4s ease;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* ============================================
+           浮动按钮组 (右上角)
+           ============================================ */
+        .floating-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .floating-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-button);
+            border: 1px solid var(--border-button);
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-button);
+            padding: 0;
+            min-width: 0;
+            font-weight: 700;
+            font-family: 'Georgia', serif;
+        }
+
+        .floating-btn:hover {
+            background: var(--bg-button-hover);
+            border-color: var(--border-button-hover);
+            transform: scale(1.1);
+            box-shadow: var(--shadow-button-hover);
+        }
+
+        .floating-btn:active {
+            transform: scale(0.95);
+        }
+
+        .floating-btn.info-btn {
+            font-family: 'Segoe UI', sans-serif;
+            font-style: italic;
+            font-size: 1.4rem;
+        }
+
+        .floating-btn.info-btn:hover {
+            transform: scale(1.1) rotate(-8deg);
+            background: var(--bg-button-primary);
+            border-color: var(--border-button-primary);
+            color: white;
+        }
+
+        .theme-toggle {
+            font-size: 1.3rem;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* ============================================
+           快捷键说明弹窗
+           ============================================ */
+        .help-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-overlay);
+            backdrop-filter: blur(12px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.4s ease;
+        }
+
+        .help-overlay.active {
+            display: flex;
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .help-modal {
+            background: var(--bg-modal);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            padding: 32px 36px;
+            max-width: 720px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-modal);
+            border: 1px solid var(--border-modal);
+            position: relative;
+            animation: slideUp 0.3s ease;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .help-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .help-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: color 0.4s ease;
+        }
+
+        .help-title-icon {
+            font-size: 1.8rem;
+        }
+
+        .help-close-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-button);
+            border: 1px solid var(--border-button);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            padding: 0;
+            min-width: 0;
+            flex-shrink: 0;
+        }
+
+        .help-close-btn:hover {
+            background: var(--bg-button-danger);
+            border-color: var(--border-button-danger);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .help-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            letter-spacing: 0.3px;
+            transition: color 0.4s ease;
+        }
+
+        .help-section {
+            margin-bottom: 24px;
+        }
+
+        .help-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .help-section-title {
+            color: var(--text-value);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border-modal-item);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.4s ease, border-color 0.4s ease;
+        }
+
+        .help-section-title .icon {
+            font-size: 1.1rem;
+        }
+
+        .help-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .help-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 10px 16px;
+            background: var(--bg-modal-item);
+            border-radius: 12px;
+            border: 1px solid var(--border-modal-item);
+            transition: all 0.2s;
+        }
+
+        .help-item:hover {
+            background: var(--bg-modal-item-hover);
+            transform: translateX(4px);
+            border-color: var(--border-button-hover);
+        }
+
+        .help-key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            height: 32px;
+            padding: 0 12px;
+            background: var(--bg-button);
+            border: 1px solid var(--border-button);
+            border-bottom-width: 2px;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 0 -1px 0 rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .help-key.wide {
+            min-width: 80px;
+        }
+
+        .help-key.special {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1rem;
+            padding: 0 10px;
+        }
+
+        .help-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.4;
+            transition: color 0.4s ease;
+        }
+
+        .help-desc strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .help-footer {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-modal-item);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            transition: border-color 0.4s ease;
+        }
+
+        .help-footer-text {
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            transition: color 0.4s ease;
+        }
+
+        .help-footer-btn {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+        }
+
+        .help-modal::-webkit-scrollbar {
+            width: 8px;
+        }
+        .help-modal::-webkit-scrollbar-track {
+            background: var(--bg-modal-item);
+            border-radius: 10px;
+        }
+        .help-modal::-webkit-scrollbar-thumb {
+            background: var(--border-button-hover);
+            border-radius: 10px;
+        }
+        .help-modal::-webkit-scrollbar-thumb:hover {
+            background: var(--bg-dot-active);
+        }
+
+        /* ============================================
+           全屏模式
+           ============================================ */
+        #fullscreenOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-fullscreen);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: background 0.4s ease;
+            overflow: hidden;
+        }
+
+        #fullscreenOverlay.active {
+            display: flex;
+        }
+
+        .fullscreen-canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            cursor: grab;
+        }
+
+        .fullscreen-canvas-container:active {
+            cursor: grabbing;
+        }
+
+        .fullscreen-canvas-inner {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
+        }
+
+        #fullscreenCanvas {
+            display: block;
+            background: var(--bg-fullscreen-canvas);
+            border-radius: 8px;
+            box-shadow: var(--shadow-fullscreen-canvas);
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            /* 像素风图片放大时保持清晰 */
+            image-rendering: pixelated;
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            pointer-events: none;
+        }
+
+        /* 缩放控制器 */
+        .zoom-controls {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-zoom-btn);
+            backdrop-filter: blur(16px);
+            padding: 8px 12px;
+            border-radius: 3rem;
+            border: 1px solid var(--border-zoom-btn);
+            box-shadow: var(--shadow-zoom-btn);
+            z-index: 10000;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .zoom-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            padding: 0;
+            min-width: 0;
+            font-weight: 700;
+            box-shadow: none;
+        }
+
+        .zoom-btn:hover {
+            background: var(--bg-button-hover);
+            color: var(--text-value);
+            transform: scale(1.1);
+        }
+
+        .zoom-btn:active {
+            transform: scale(0.95);
+        }
+
+        .zoom-btn.reset-btn {
+            width: auto;
+            min-width: 60px;
+            padding: 0 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .zoom-level {
+            color: var(--text-value);
+            font-size: 0.85rem;
+            font-weight: 700;
+            min-width: 55px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            padding: 0 6px;
+            transition: color 0.4s ease;
+        }
+
+        .zoom-separator {
+            width: 1px;
+            height: 20px;
+            background: var(--border-zoom-btn);
+            margin: 0 4px;
+            transition: background 0.4s ease;
+        }
+
+        .fullscreen-controls {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-fullscreen-controls);
+            backdrop-filter: blur(16px);
+            padding: 12px 24px;
+            border-radius: 3rem;
+            border: 1px solid var(--border-fullscreen-controls);
+            box-shadow: var(--shadow-fullscreen-controls);
+            flex-wrap: wrap;
+            justify-content: center;
+            z-index: 10000;
+            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .fullscreen-controls button {
+            min-width: 60px;
+            padding: 8px 16px;
+        }
+
+        .fullscreen-controls .fps-value {
+            min-width: 40px;
+        }
+
+        .fullscreen-controls input[type="range"] {
+            width: 100px;
+        }
+
+        .fullscreen-controls .control-group label {
+            font-size: 0.8rem;
+        }
+
+        .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-fullscreen-close);
+            border: 1px solid var(--border-fullscreen-close);
+            color: var(--text-frame-badge);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10001;
+            padding: 0;
+            min-width: 0;
+            box-shadow: var(--shadow-fullscreen-close);
+        }
+
+        .fullscreen-close:hover {
+            background: var(--bg-fullscreen-close-hover);
+            border-color: #ff7a8a;
+            color: white;
+            transform: rotate(90deg) scale(1.05);
+        }
+
+        .fullscreen-info {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            color: var(--text-info);
+            font-size: 0.9rem;
+            background: var(--bg-fullscreen-info);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 2rem;
+            border: 1px solid var(--border-fullscreen-info);
+            z-index: 10000;
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap;
+            transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+        }
+
+        .fullscreen-info .value {
+            color: var(--text-value);
+            font-weight: 600;
+            transition: color 0.4s ease;
+        }
+
+        .fullscreen-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bg-progress);
+            z-index: 10000;
+            transition: background 0.4s ease;
+        }
+
+        .fullscreen-progress-bar {
+            height: 100%;
+            background: var(--gradient-progress);
+            transition: width 0.1s linear;
+            box-shadow: var(--shadow-progress-glow);
+            width: 0%;
+        }
+
+        .fullscreen-hint {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            z-index: 10000;
+            opacity: 0.7;
+            pointer-events: none;
+            transition: color 0.4s ease;
+        }
+
+        /* 响应式 */
+        @media (max-width: 900px) {
+            .tool-container {
+                padding: 16px;
+            }
+            .controls {
+                gap: 10px 12px;
+                padding: 12px 16px;
+            }
+            button {
+                padding: 6px 14px;
+                font-size: 0.85rem;
+                min-width: 60px;
+            }
+            .fullscreen-controls {
+                padding: 10px 16px;
+                gap: 8px;
+            }
+            .floating-buttons {
+                top: 12px;
+                right: 12px;
+                gap: 8px;
+            }
+            .floating-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            .help-modal {
+                padding: 24px 20px;
+            }
+            .help-title {
+                font-size: 1.2rem;
+            }
+            .help-item {
+                padding: 8px 12px;
+                gap: 10px;
+            }
+            .help-key {
+                min-width: 50px;
+                padding: 0 8px;
+                font-size: 0.75rem;
+            }
+            .zoom-controls {
+                top: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-buttons">
+        <button class="floating-btn info-btn" id="helpBtn" title="快捷键说明 (I键)">i</button>
+        <button class="floating-btn theme-toggle" id="themeToggle" title="切换主题 (T键)">🌙</button>
+    </div>
+
+    <div class="tool-container">
+        <div class="info-bar" id="infoBar" style="display: none;">
+            <span>📁 已加载: <span class="value" id="fileNameDisplay">—</span></span>
+            <span>🖼️ 帧数: <span class="value" id="frameCountDisplay">0</span></span>
+            <span>📐 尺寸: <span class="value" id="dimensionDisplay">—</span></span>
+        </div>
+
+        <div class="viewport">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">🎞️</div>
+                <div class="upload-text">
+                    <strong>点击或拖拽图片到此处</strong>
+                    支持批量选择图片序列 (PNG / JPG / GIF / WebP)
+                    <div class="upload-hint">按文件名排序，建议命名为 001.png、002.png ... 或 frame_01.png ...</div>
+                </div>
+            </div>
+
+            <div class="canvas-wrapper" id="canvasWrapper" style="display: none;">
+                <canvas id="animCanvas"></canvas>
+                <button class="fullscreen-btn" id="fullscreenBtn" title="全屏放大 (F键)">⛶</button>
+                <div class="frame-badge" id="frameBadge">帧 0 / 0</div>
+            </div>
+        </div>
+
+        <div class="controls" id="controlsBar" style="display: none;">
+            <div class="control-group">
+                <button id="playPauseBtn" class="primary" title="播放/暂停 (空格键)">▶ 播放</button>
+                <button id="resetBtn" title="重置到第一帧并暂停">⟲ 重置</button>
+            </div>
+
+            <div class="control-group">
+                <label>FPS</label>
+                <input type="range" id="fpsSlider" min="1" max="60" value="12" step="1">
+                <span class="fps-value" id="fpsDisplay">12</span>
+            </div>
+
+            <div class="control-group">
+                <button id="prevFrameBtn" title="上一帧 (←)">◀</button>
+                <button id="nextFrameBtn" title="下一帧 (→)">▶</button>
+            </div>
+
+            <div class="control-group">
+                <button id="fullscreenBtn2" title="全屏放大 (F键)">⛶ 全屏</button>
+            </div>
+
+            <div class="control-group">
+                <button id="reimportBtn" class="danger" title="重新选择图片">📂 重新导入</button>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; margin-top: 14px; overflow-x: auto;" id="dotsContainerOuter">
+            <div class="frame-dots" id="frameDotsContainer"></div>
+        </div>
+
+        <div class="thumbnail-strip" id="thumbnailStrip"></div>
+
+        <div class="footer-hint">序列帧 · 可视化播放工具 | 按 I 键查看快捷键说明 | 按 T 键切换主题 | 按 F 键全屏</div>
+    </div>
+
+    <!-- 快捷键说明弹窗 -->
+    <div class="help-overlay" id="helpOverlay">
+        <div class="help-modal" id="helpModal">
+            <div class="help-header">
+                <div class="help-title">
+                    <span class="help-title-icon">⌨️</span>
+                    快捷键说明
+                </div>
+                <button class="help-close-btn" id="helpCloseBtn" title="关闭 (ESC / I)">✕</button>
+            </div>
+            <div class="help-subtitle">掌握以下快捷键，提升操作效率</div>
+
+            <div class="help-section">
+                <div class="help-section-title">
+                    <span class="icon">🎬</span> 播放控制
+                </div>
+                <div class="help-list">
+                    <div class="help-item">
+                        <span class="help-key wide">Space</span>
+                        <span class="help-desc"><strong>播放 / 暂停</strong> — 切换动画的播放状态</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key wide">R</span>
+                        <span class="help-desc"><strong>重置</strong> — 回到第一帧并暂停播放</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <div class="help-section-title">
+                    <span class="icon">🎞️</span> 帧导航
+                </div>
+                <div class="help-list">
+                    <div class="help-item">
+                        <span class="help-key">←</span>
+                        <span class="help-desc"><strong>上一帧</strong> — 向后切换一帧</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key">→</span>
+                        <span class="help-desc"><strong>下一帧</strong> — 向前切换一帧</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <div class="help-section-title">
+                    <span class="icon">🔍</span> 缩放控制（全屏模式）
+                </div>
+                <div class="help-list">
+                    <div class="help-item">
+                        <span class="help-key">+</span>
+                        <span class="help-desc"><strong>放大</strong> — 放大图片（每次 ×1.2）</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key">-</span>
+                        <span class="help-desc"><strong>缩小</strong> — 缩小图片（每次 ÷1.2）</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key wide">0</span>
+                        <span class="help-desc"><strong>适应屏幕</strong> — 自动缩放到最佳大小</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key wide">1</span>
+                        <span class="help-desc"><strong>原始尺寸</strong> — 100% 显示（像素级）</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key wide">滚轮</span>
+                        <span class="help-desc"><strong>快速缩放</strong> — 鼠标滚轮上下滚动缩放</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key wide">拖拽</span>
+                        <span class="help-desc"><strong>平移视图</strong> — 放大后可拖拽移动图片</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <div class="help-section-title">
+                    <span class="icon">🖥️</span> 视图控制
+                </div>
+                <div class="help-list">
+                    <div class="help-item">
+                        <span class="help-key">F</span>
+                        <span class="help-desc"><strong>全屏切换</strong> — 进入或退出全屏放大模式</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key wide">ESC</span>
+                        <span class="help-desc"><strong>退出全屏</strong> — 从全屏模式返回普通视图</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key">T</span>
+                        <span class="help-desc"><strong>切换主题</strong> — 在深色 / 浅色主题间切换</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key">I</span>
+                        <span class="help-desc"><strong>显示 / 隐藏说明</strong> — 打开或关闭当前快捷键说明页</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <div class="help-section-title">
+                    <span class="icon">📁</span> 文件操作
+                </div>
+                <div class="help-list">
+                    <div class="help-item">
+                        <span class="help-key wide">点击</span>
+                        <span class="help-desc"><strong>上传区域</strong> — 打开文件选择器，批量选择图片</span>
+                    </div>
+                    <div class="help-item">
+                        <span class="help-key wide">拖拽</span>
+                        <span class="help-desc"><strong>拖入窗口</strong> — 直接拖拽图片文件到上传区域</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-footer">
+                <div class="help-footer-text">提示：部分快捷键在输入框聚焦时会被忽略</div>
+                <button class="help-footer-btn primary" id="helpGotItBtn">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全屏模式覆盖层 -->
+    <div id="fullscreenOverlay">
+        <button class="fullscreen-close" id="fullscreenCloseBtn" title="退出全屏 (ESC / F)">✕</button>
+
+        <div class="fullscreen-info">
+            <span>🖼️ 帧 <span class="value" id="fsFrameInfo">0 / 0</span></span>
+            <span>📐 <span class="value" id="fsDimensionInfo">—</span></span>
+            <span>⚡ <span class="value" id="fsFpsInfo">12</span> FPS</span>
+        </div>
+
+        <!-- 缩放控制栏 -->
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="zoomOutBtn" title="缩小 (-)">−</button>
+            <span class="zoom-level" id="zoomLevel">100%</span>
+            <button class="zoom-btn" id="zoomInBtn" title="放大 (+)">+</button>
+            <span class="zoom-separator"></span>
+            <button class="zoom-btn reset-btn" id="zoomFitBtn" title="适应屏幕 (0)">适应</button>
+            <button class="zoom-btn reset-btn" id="zoomActualBtn" title="原始尺寸 (1)">1:1</button>
+        </div>
+
+        <div class="fullscreen-canvas-container" id="fullscreenCanvasContainer">
+            <div class="fullscreen-canvas-inner" id="fullscreenCanvasInner">
+                <canvas id="fullscreenCanvas"></canvas>
+            </div>
+        </div>
+
+        <div class="fullscreen-controls">
+            <div class="control-group">
+                <button id="fsPlayPauseBtn" class="primary" title="播放/暂停 (空格键)">▶ 播放</button>
+                <button id="fsResetBtn" title="重置到第一帧">⟲</button>
+            </div>
+            <div class="control-group">
+                <label>FPS</label>
+                <input type="range" id="fsFpsSlider" min="1" max="60" value="12" step="1">
+                <span class="fps-value" id="fsFpsDisplay">12</span>
+            </div>
+            <div class="control-group">
+                <button id="fsPrevFrameBtn" title="上一帧 (←)">◀</button>
+                <button id="fsNextFrameBtn" title="下一帧 (→)">▶</button>
+            </div>
+        </div>
+
+        <div class="frame-badge" id="fsFrameBadge">帧 0 / 0</div>
+
+        <div class="fullscreen-hint">滚轮缩放 · 拖拽平移 · +/− 缩放 · 0 适应 · 1 原始 · F/ESC 退出</div>
+
+        <div class="fullscreen-progress">
+            <div class="fullscreen-progress-bar" id="fullscreenProgressBar"></div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" accept="image/*" multiple>
+
+    <script>
+        (function(){
+            // ---------- DOM 元素 ----------
+            const canvas = document.getElementById('animCanvas');
+            const ctx = canvas.getContext('2d');
+            const frameBadge = document.getElementById('frameBadge');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const prevFrameBtn = document.getElementById('prevFrameBtn');
+            const nextFrameBtn = document.getElementById('nextFrameBtn');
+            const reimportBtn = document.getElementById('reimportBtn');
+            const fpsSlider = document.getElementById('fpsSlider');
+            const fpsDisplay = document.getElementById('fpsDisplay');
+            const frameDotsContainer = document.getElementById('frameDotsContainer');
+            const uploadArea = document.getElementById('uploadArea');
+            const canvasWrapper = document.getElementById('canvasWrapper');
+            const controlsBar = document.getElementById('controlsBar');
+            const infoBar = document.getElementById('infoBar');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const frameCountDisplay = document.getElementById('frameCountDisplay');
+            const dimensionDisplay = document.getElementById('dimensionDisplay');
+            const thumbnailStrip = document.getElementById('thumbnailStrip');
+            const fileInput = document.getElementById('fileInput');
+            const themeToggle = document.getElementById('themeToggle');
+            
+            // 说明弹窗
+            const helpBtn = document.getElementById('helpBtn');
+            const helpOverlay = document.getElementById('helpOverlay');
+            const helpCloseBtn = document.getElementById('helpCloseBtn');
+            const helpGotItBtn = document.getElementById('helpGotItBtn');
+            
+            // 全屏相关
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const fullscreenBtn2 = document.getElementById('fullscreenBtn2');
+            const fullscreenOverlay = document.getElementById('fullscreenOverlay');
+            const fullscreenCanvas = document.getElementById('fullscreenCanvas');
+            const fsCtx = fullscreenCanvas.getContext('2d');
+            const fullscreenCloseBtn = document.getElementById('fullscreenCloseBtn');
+            const fsPlayPauseBtn = document.getElementById('fsPlayPauseBtn');
+            const fsResetBtn = document.getElementById('fsResetBtn');
+            const fsPrevFrameBtn = document.getElementById('fsPrevFrameBtn');
+            const fsNextFrameBtn = document.getElementById('fsNextFrameBtn');
+            const fsFpsSlider = document.getElementById('fsFpsSlider');
+            const fsFpsDisplay = document.getElementById('fsFpsDisplay');
+            const fsFrameInfo = document.getElementById('fsFrameInfo');
+            const fsDimensionInfo = document.getElementById('fsDimensionInfo');
+            const fsFpsInfo = document.getElementById('fsFpsInfo');
+            const fsFrameBadge = document.getElementById('fsFrameBadge');
+            const fullscreenProgressBar = document.getElementById('fullscreenProgressBar');
+            
+            // 缩放相关
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            const zoomFitBtn = document.getElementById('zoomFitBtn');
+            const zoomActualBtn = document.getElementById('zoomActualBtn');
+            const zoomLevel = document.getElementById('zoomLevel');
+            const fullscreenCanvasContainer = document.getElementById('fullscreenCanvasContainer');
+            const fullscreenCanvasInner = document.getElementById('fullscreenCanvasInner');
+
+            // ---------- 状态 ----------
+            let frames = [];
+            let currentFrame = 0;
+            let isPlaying = false;
+            let animationTimer = null;
+            let lastTimestamp = 0;
+            let accumulatedTime = 0;
+            let fps = 12;
+            let canvasWidth = 640;
+            let canvasHeight = 360;
+            let lastFileNames = '';
+            let isFullscreen = false;
+            let currentTheme = 'dark';
+            let isHelpOpen = false;
+            
+            // 缩放状态
+            let zoomScale = 1;           // 当前缩放比例
+            let panX = 0;                // 平移X
+            let panY = 0;                // 平移Y
+            let isDragging = false;
+            let dragStartX = 0;
+            let dragStartY = 0;
+            let dragStartPanX = 0;
+            let dragStartPanY = 0;
+            let fitScale = 1;            // 适应屏幕的缩放比例
+
+            const ZOOM_STEP = 1.25;      // 每次缩放倍率
+            const MIN_ZOOM = 0.05;
+            const MAX_ZOOM = 20;
+
+            // ---------- 主题切换 ----------
+            function setTheme(theme) {
+                currentTheme = theme;
+                if (theme === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    themeToggle.textContent = '☀️';
+                    themeToggle.title = '切换到深色主题 (T键)';
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    themeToggle.textContent = '🌙';
+                    themeToggle.title = '切换到浅色主题 (T键)';
+                }
+                try {
+                    localStorage.setItem('frameAnimTheme', theme);
+                } catch(e) {}
+            }
+
+            function toggleTheme() {
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            }
+
+            function loadSavedTheme() {
+                try {
+                    const saved = localStorage.getItem('frameAnimTheme');
+                    if (saved === 'light' || saved === 'dark') {
+                        setTheme(saved);
+                    } else {
+                        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+                        setTheme(prefersLight ? 'light' : 'dark');
+                    }
+                } catch(e) {
+                    setTheme('dark');
+                }
+            }
+
+            // ---------- 帮助弹窗 ----------
+            function openHelp() {
+                isHelpOpen = true;
+                helpOverlay.classList.add('active');
+            }
+
+            function closeHelp() {
+                isHelpOpen = false;
+                helpOverlay.classList.remove('active');
+            }
+
+            function toggleHelp() {
+                if (isHelpOpen) {
+                    closeHelp();
+                } else {
+                    openHelp();
+                }
+            }
+
+            // ---------- 工具函数 ----------
+            function getFrameInterval() {
+                return 1000 / fps;
+            }
+
+            function naturalSort(a, b) {
+                return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+            }
+
+            // ---------- 绘制帧 ----------
+            function drawFrameToContext(targetCtx, targetCanvas, frameIndex, fitMode) {
+                if (!frames.length || !frames[frameIndex]) return;
+                
+                const img = frames[frameIndex];
+                
+                if (!img.complete || img.naturalWidth === 0) {
+                    img.onload = () => {
+                        if (frames[currentFrame] === img) {
+                            drawFrameToContext(targetCtx, targetCanvas, currentFrame, fitMode);
+                        }
+                    };
+                    return;
+                }
+
+                if (fitMode === 'fullscreen') {
+                    // 全屏模式下，画布尺寸 = 图片原始尺寸
+                    if (targetCanvas.width !== img.naturalWidth || targetCanvas.height !== img.naturalHeight) {
+                        targetCanvas.width = img.naturalWidth;
+                        targetCanvas.height = img.naturalHeight;
+                    }
+                    targetCtx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+                    targetCtx.drawImage(img, 0, 0);
+                } else {
+                    if (canvasWidth !== img.naturalWidth || canvasHeight !== img.naturalHeight) {
+                        canvasWidth = img.naturalWidth;
+                        canvasHeight = img.naturalHeight;
+                        targetCanvas.width = canvasWidth;
+                        targetCanvas.height = canvasHeight;
+                        
+                        const viewportWidth = window.innerWidth;
+                        const availableWidth = Math.min(viewportWidth - 120, 1300);
+                        const maxDisplayWidth = Math.max(availableWidth, 600);
+                        const maxDisplayHeight = window.innerHeight - 300;
+                        
+                        let displayWidth = canvasWidth;
+                        let displayHeight = canvasHeight;
+                        
+                        if (displayWidth < 400) {
+                            const scale = 400 / displayWidth;
+                            displayWidth = 400;
+                            displayHeight = displayHeight * scale;
+                        }
+                        
+                        if (displayWidth > maxDisplayWidth) {
+                            const scale = maxDisplayWidth / displayWidth;
+                            displayWidth = maxDisplayWidth;
+                            displayHeight = displayHeight * scale;
+                        }
+                        
+                        if (displayHeight > maxDisplayHeight && maxDisplayHeight > 200) {
+                            const scale = maxDisplayHeight / displayHeight;
+                            displayHeight = maxDisplayHeight;
+                            displayWidth = displayWidth * scale;
+                        }
+                        
+                        displayWidth = Math.max(displayWidth, 300);
+                        displayHeight = Math.max(displayHeight, 200);
+                        
+                        targetCanvas.style.width = Math.round(displayWidth) + 'px';
+                        targetCanvas.style.height = Math.round(displayHeight) + 'px';
+                        
+                        dimensionDisplay.textContent = `${canvasWidth} × ${canvasHeight}`;
+                        fsDimensionInfo.textContent = `${canvasWidth} × ${canvasHeight}`;
+                    }
+
+                    targetCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+                    targetCtx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+                }
+            }
+
+            // ---------- 更新 UI ----------
+            function updateUI() {
+                if (!frames.length) return;
+
+                const totalFrames = frames.length;
+                const frameText = `帧 ${currentFrame + 1} / ${totalFrames}`;
+                
+                frameBadge.textContent = frameText;
+                fsFrameBadge.textContent = frameText;
+                fsFrameInfo.textContent = `${currentFrame + 1} / ${totalFrames}`;
+                
+                const progress = totalFrames > 1 ? (currentFrame / (totalFrames - 1)) * 100 : 100;
+                fullscreenProgressBar.style.width = progress + '%';
+                
+                const dots = frameDotsContainer.querySelectorAll('.dot');
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx === currentFrame);
+                });
+
+                const thumbnails = thumbnailStrip.querySelectorAll('img');
+                thumbnails.forEach((img, idx) => {
+                    img.classList.toggle('active', idx === currentFrame);
+                });
+
+                const activeThumb = thumbnailStrip.querySelector('img.active');
+                if (activeThumb) {
+                    activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }
+
+            // ---------- 渲染帧 ----------
+            function renderFrame(frameIndex) {
+                if (!frames.length) return;
+                
+                if (frameIndex < 0) frameIndex = frames.length - 1;
+                if (frameIndex >= frames.length) frameIndex = 0;
+                
+                currentFrame = frameIndex;
+                
+                drawFrameToContext(ctx, canvas, currentFrame, 'normal');
+                if (isFullscreen) {
+                    drawFrameToContext(fsCtx, fullscreenCanvas, currentFrame, 'fullscreen');
+                }
+                
+                updateUI();
+            }
+
+            // ---------- 播放控制 ----------
+            function startPlayback() {
+                if (isPlaying || !frames.length) return;
+                isPlaying = true;
+                updatePlayPauseUI();
+                
+                lastTimestamp = performance.now();
+                accumulatedTime = 0;
+                
+                function tick(now) {
+                    if (!isPlaying) return;
+                    
+                    const delta = now - lastTimestamp;
+                    lastTimestamp = now;
+                    
+                    if (delta < 200) {
+                        accumulatedTime += delta;
+                    } else {
+                        accumulatedTime = 0;
+                    }
+                    
+                    const interval = getFrameInterval();
+                    
+                    if (accumulatedTime >= interval) {
+                        let framesToAdvance = Math.floor(accumulatedTime / interval);
+                        framesToAdvance = Math.min(framesToAdvance, 5);
+                        accumulatedTime -= framesToAdvance * interval;
+                        
+                        for (let i = 0; i < framesToAdvance; i++) {
+                            currentFrame = (currentFrame + 1) % frames.length;
+                        }
+                        
+                        drawFrameToContext(ctx, canvas, currentFrame, 'normal');
+                        if (isFullscreen) {
+                            drawFrameToContext(fsCtx, fullscreenCanvas, currentFrame, 'fullscreen');
+                        }
+                        updateUI();
+                    }
+                    
+                    animationTimer = requestAnimationFrame(tick);
+                }
+                
+                animationTimer = requestAnimationFrame(tick);
+            }
+
+            function pausePlayback() {
+                if (!isPlaying) return;
+                isPlaying = false;
+                updatePlayPauseUI();
+                if (animationTimer) {
+                    cancelAnimationFrame(animationTimer);
+                    animationTimer = null;
+                }
+            }
+
+            function togglePlayPause() {
+                if (!frames.length) return;
+                if (isPlaying) {
+                    pausePlayback();
+                } else {
+                    startPlayback();
+                }
+            }
+
+            function updatePlayPauseUI() {
+                const text = isPlaying ? '⏸ 暂停' : '▶ 播放';
+                playPauseBtn.textContent = text;
+                fsPlayPauseBtn.textContent = text;
+            }
+
+            function resetToFirstFrame() {
+                if (!frames.length) return;
+                if (isPlaying) pausePlayback();
+                renderFrame(0);
+            }
+
+            // ---------- 设置FPS ----------
+            function setFps(newFps) {
+                fps = Math.min(60, Math.max(1, newFps));
+                fpsSlider.value = fps;
+                fsFpsSlider.value = fps;
+                fpsDisplay.textContent = fps;
+                fsFpsDisplay.textContent = fps;
+                fsFpsInfo.textContent = fps;
+                
+                if (isPlaying) {
+                    accumulatedTime = 0;
+                    lastTimestamp = performance.now();
+                }
+            }
+
+            // ============================================
+            // 缩放功能核心
+            // ============================================
+            
+            // 计算"适应屏幕"的缩放比例
+            function calculateFitScale() {
+                if (!fullscreenCanvas.width || !fullscreenCanvas.height) return 1;
+                
+                const containerW = fullscreenCanvasContainer.clientWidth;
+                const containerH = fullscreenCanvasContainer.clientHeight;
+                const padding = 80; // 留一些边距
+                
+                const availableW = containerW - padding;
+                const availableH = containerH - padding;
+                
+                const scaleX = availableW / fullscreenCanvas.width;
+                const scaleY = availableH / fullscreenCanvas.height;
+                
+                // 取小值保证完整显示，且至少为 1（如果图片太小就放大到填满）
+                const scale = Math.min(scaleX, scaleY);
+                return Math.max(scale, 0.1);
+            }
+            
+            // 应用缩放和平移到画布
+            function applyZoom() {
+                // 限制缩放范围
+                zoomScale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoomScale));
+                
+                // 使用 transform 缩放
+                fullscreenCanvasInner.style.transform = 
+                    `translate(${panX}px, ${panY}px) scale(${zoomScale})`;
+                
+                // 更新缩放显示
+                zoomLevel.textContent = Math.round(zoomScale * 100) + '%';
+            }
+            
+            // 适应屏幕
+            function zoomToFit() {
+                if (!fullscreenCanvas.width || !fullscreenCanvas.height) return;
+                
+                fitScale = calculateFitScale();
+                zoomScale = fitScale;
+                panX = 0;
+                panY = 0;
+                applyZoom();
+            }
+            
+            // 原始尺寸
+            function zoomToActual() {
+                zoomScale = 1;
+                panX = 0;
+                panY = 0;
+                applyZoom();
+            }
+            
+            // 放大
+            function zoomIn() {
+                zoomScale *= ZOOM_STEP;
+                applyZoom();
+            }
+            
+            // 缩小
+            function zoomOut() {
+                zoomScale /= ZOOM_STEP;
+                applyZoom();
+            }
+            
+            // 以鼠标位置为中心缩放（滚轮）
+            function zoomAtPoint(delta, mouseX, mouseY) {
+                if (!fullscreenCanvas.width || !fullscreenCanvas.height) return;
+                
+                // 计算鼠标在容器内的相对位置（相对于容器中心）
+                const containerRect = fullscreenCanvasContainer.getBoundingClientRect();
+                const containerCenterX = containerRect.width / 2;
+                const containerCenterY = containerRect.height / 2;
+                
+                // 鼠标相对于容器中心的位置
+                const mouseRelX = mouseX - containerRect.left - containerCenterX;
+                const mouseRelY = mouseY - containerRect.top - containerCenterY;
+                
+                // 缩放前的画布中心在容器中的位置（考虑当前 pan）
+                // 画布中心在屏幕上的位置 = 容器中心 + pan
+                const canvasCenterX = panX;
+                const canvasCenterY = panY;
+                
+                // 鼠标相对于画布中心的位置（缩放前）
+                const offsetX = mouseRelX - canvasCenterX;
+                const offsetY = mouseRelY - canvasCenterY;
+                
+                // 计算新的缩放比例
+                const oldScale = zoomScale;
+                const factor = delta > 0 ? 1 / ZOOM_STEP : ZOOM_STEP;
+                const newScale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, oldScale * factor));
+                
+                if (newScale === oldScale) return;
+                
+                // 调整 pan 使鼠标位置保持在同一点
+                // 公式: newPan = mouseRel - (mouseRel - oldPan) * (newScale / oldScale)
+                panX = mouseRelX - offsetX * (newScale / oldScale);
+                panY = mouseRelY - offsetY * (newScale / oldScale);
+                
+                zoomScale = newScale;
+                applyZoom();
+            }
+
+            // ---------- 生成帧指示圆点 ----------
+            function buildFrameDots() {
+                frameDotsContainer.innerHTML = '';
+                if (!frames.length) return;
+                
+                if (frames.length > 150) {
+                    frameDotsContainer.style.display = 'none';
+                    return;
+                } else {
+                    frameDotsContainer.style.display = 'flex';
+                }
+                
+                for (let i = 0; i < frames.length; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    if (i === currentFrame) dot.classList.add('active');
+                    dot.dataset.frameIndex = i;
+                    dot.title = `跳转到帧 ${i + 1}`;
+                    dot.addEventListener('click', () => {
+                        if (isPlaying) pausePlayback();
+                        renderFrame(i);
+                    });
+                    frameDotsContainer.appendChild(dot);
+                }
+            }
+
+            // ---------- 生成缩略图 ----------
+            function buildThumbnails() {
+                thumbnailStrip.innerHTML = '';
+                if (!frames.length) {
+                    thumbnailStrip.classList.remove('visible');
+                    return;
+                }
+                
+                if (frames.length > 100) {
+                    thumbnailStrip.classList.remove('visible');
+                    return;
+                }
+                
+                thumbnailStrip.classList.add('visible');
+                
+                frames.forEach((img, idx) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = img.src;
+                    thumb.alt = `帧 ${idx + 1}`;
+                    thumb.title = `点击跳转到帧 ${idx + 1}`;
+                    if (idx === currentFrame) thumb.classList.add('active');
+                    thumb.addEventListener('click', () => {
+                        if (isPlaying) pausePlayback();
+                        renderFrame(idx);
+                    });
+                    thumbnailStrip.appendChild(thumb);
+                });
+            }
+
+            // ---------- 加载图片 ----------
+            async function loadImageFiles(files) {
+                const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+                if (imageFiles.length === 0) {
+                    alert('请选择有效的图片文件（PNG / JPG / GIF / WebP 等）');
+                    return;
+                }
+
+                imageFiles.sort((a, b) => naturalSort(a.name, b.name));
+
+                if (isPlaying) pausePlayback();
+
+                lastFileNames = imageFiles.length > 0 
+                    ? (imageFiles.length === 1 ? imageFiles[0].name : `${imageFiles.length} 个文件`)
+                    : '—';
+
+                uploadArea.style.display = 'none';
+                canvasWrapper.style.display = 'none';
+                controlsBar.style.display = 'none';
+                infoBar.style.display = 'none';
+                thumbnailStrip.classList.remove('visible');
+
+                const loadPromises = imageFiles.map((file, index) => {
+                    return new Promise((resolve) => {
+                        const img = new Image();
+                        const url = URL.createObjectURL(file);
+                        img.src = url;
+                        img.onload = () => {
+                            img._objectURL = url;
+                            resolve({ img, index });
+                        };
+                        img.onerror = () => {
+                            console.warn(`无法加载图片: ${file.name}`);
+                            URL.revokeObjectURL(url);
+                            resolve(null);
+                        };
+                    });
+                });
+
+                const results = await Promise.all(loadPromises);
+                const validResults = results.filter(r => r !== null);
+                validResults.sort((a, b) => a.index - b.index);
+                
+                const loadedImages = validResults.map(r => r.img);
+                
+                if (loadedImages.length === 0) {
+                    alert('未能加载任何图片，请检查文件格式。');
+                    resetToUploadState();
+                    return;
+                }
+
+                frames.forEach(img => {
+                    if (img._objectURL) {
+                        URL.revokeObjectURL(img._objectURL);
+                    }
+                });
+
+                frames = loadedImages;
+                currentFrame = 0;
+                
+                fileNameDisplay.textContent = lastFileNames;
+                frameCountDisplay.textContent = frames.length;
+                infoBar.style.display = 'flex';
+                
+                uploadArea.style.display = 'none';
+                canvasWrapper.style.display = 'inline-block';
+                controlsBar.style.display = 'flex';
+
+                if (frames.length > 0) {
+                    const firstImg = frames[0];
+                    
+                    const initCanvas = () => {
+                        canvasWidth = 0;
+                        canvasHeight = 0;
+                        
+                        drawFrameToContext(ctx, canvas, 0, 'normal');
+                        if (isFullscreen) {
+                            drawFrameToContext(fsCtx, fullscreenCanvas, 0, 'fullscreen');
+                        }
+                        
+                        buildFrameDots();
+                        buildThumbnails();
+                        updateUI();
+                    };
+                    
+                    if (firstImg.complete) {
+                        initCanvas();
+                    } else {
+                        firstImg.onload = initCanvas;
+                    }
+                }
+                
+                updatePlayPauseUI();
+                isPlaying = false;
+            }
+
+            function resetToUploadState() {
+                if (isPlaying) pausePlayback();
+                
+                frames.forEach(img => {
+                    if (img._objectURL) {
+                        URL.revokeObjectURL(img._objectURL);
+                    }
+                });
+                frames = [];
+                currentFrame = 0;
+                
+                uploadArea.style.display = 'flex';
+                canvasWrapper.style.display = 'none';
+                controlsBar.style.display = 'none';
+                infoBar.style.display = 'none';
+                thumbnailStrip.classList.remove('visible');
+                frameDotsContainer.innerHTML = '';
+                fileInput.value = '';
+            }
+
+            // ---------- 文件选择 ----------
+            function handleFileSelect(e) {
+                const files = e.target.files;
+                if (files && files.length > 0) {
+                    loadImageFiles(files);
+                }
+                fileInput.value = '';
+            }
+
+            // ---------- 全屏 ----------
+            function enterFullscreen() {
+                if (!frames.length) return;
+                
+                isFullscreen = true;
+                fullscreenOverlay.classList.add('active');
+                document.body.classList.add('fullscreen-mode');
+                
+                // 绘制全屏画布
+                drawFrameToContext(fsCtx, fullscreenCanvas, currentFrame, 'fullscreen');
+                
+                fsDimensionInfo.textContent = `${canvasWidth} × ${canvasHeight}`;
+                fsFpsInfo.textContent = fps;
+                updateUI();
+                
+                fsFpsSlider.value = fps;
+                fsFpsDisplay.textContent = fps;
+                
+                updatePlayPauseUI();
+                
+                // 自动适应屏幕
+                setTimeout(() => {
+                    zoomToFit();
+                }, 50);
+            }
+
+            function exitFullscreen() {
+                isFullscreen = false;
+                fullscreenOverlay.classList.remove('active');
+                document.body.classList.remove('fullscreen-mode');
+                
+                // 重置缩放状态
+                zoomScale = 1;
+                panX = 0;
+                panY = 0;
+                fullscreenCanvasInner.style.transform = '';
+            }
+
+            function toggleFullscreen() {
+                if (isFullscreen) {
+                    exitFullscreen();
+                } else {
+                    enterFullscreen();
+                }
+            }
+
+            // ---------- 拖拽上传 ----------
+            function setupDragAndDrop() {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    document.body.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                });
+
+                uploadArea.addEventListener('dragenter', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+                uploadArea.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                });
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files && files.length > 0) {
+                        loadImageFiles(files);
+                    }
+                });
+
+                uploadArea.addEventListener('click', () => {
+                    fileInput.click();
+                });
+
+                reimportBtn.addEventListener('click', () => {
+                    fileInput.click();
+                });
+            }
+
+            // ---------- 缩放事件绑定 ----------
+            function bindZoomEvents() {
+                // 缩放按钮
+                zoomInBtn.addEventListener('click', zoomIn);
+                zoomOutBtn.addEventListener('click', zoomOut);
+                zoomFitBtn.addEventListener('click', zoomToFit);
+                zoomActualBtn.addEventListener('click', zoomToActual);
+                
+                // 滚轮缩放
+                fullscreenCanvasContainer.addEventListener('wheel', (e) => {
+                    if (!isFullscreen) return;
+                    e.preventDefault();
+                    zoomAtPoint(e.deltaY, e.clientX, e.clientY);
+                }, { passive: false });
+                
+                // 拖拽平移
+                fullscreenCanvasContainer.addEventListener('mousedown', (e) => {
+                    if (!isFullscreen) return;
+                    if (e.button !== 0) return; // 只响应左键
+                    // 检查是否点击在按钮或控件上
+                    if (e.target.closest('button') || e.target.closest('.zoom-controls') || 
+                        e.target.closest('.fullscreen-controls') || e.target.closest('.fullscreen-close') ||
+                        e.target.closest('.fullscreen-info') || e.target.closest('.frame-badge')) {
+                        return;
+                    }
+                    
+                    isDragging = true;
+                    dragStartX = e.clientX;
+                    dragStartY = e.clientY;
+                    dragStartPanX = panX;
+                    dragStartPanY = panY;
+                    fullscreenCanvasContainer.style.cursor = 'grabbing';
+                });
+                
+                window.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    
+                    const dx = e.clientX - dragStartX;
+                    const dy = e.clientY - dragStartY;
+                    
+                    panX = dragStartPanX + dx;
+                    panY = dragStartPanY + dy;
+                    applyZoom();
+                });
+                
+                window.addEventListener('mouseup', () => {
+                    if (isDragging) {
+                        isDragging = false;
+                        fullscreenCanvasContainer.style.cursor = 'grab';
+                    }
+                });
+                
+                // 触摸拖拽（移动端）
+                let touchStartX = 0, touchStartY = 0;
+                let touchStartPanX = 0, touchStartPanY = 0;
+                let isTouching = false;
+                
+                fullscreenCanvasContainer.addEventListener('touchstart', (e) => {
+                    if (!isFullscreen) return;
+                    if (e.touches.length !== 1) return;
+                    if (e.target.closest('button') || e.target.closest('.zoom-controls') || 
+                        e.target.closest('.fullscreen-controls')) {
+                        return;
+                    }
+                    
+                    isTouching = true;
+                    const t = e.touches[0];
+                    touchStartX = t.clientX;
+                    touchStartY = t.clientY;
+                    touchStartPanX = panX;
+                    touchStartPanY = panY;
+                }, { passive: true });
+                
+                fullscreenCanvasContainer.addEventListener('touchmove', (e) => {
+                    if (!isTouching) return;
+                    if (e.touches.length !== 1) return;
+                    
+                    const t = e.touches[0];
+                    panX = touchStartPanX + (t.clientX - touchStartX);
+                    panY = touchStartPanY + (t.clientY - touchStartY);
+                    applyZoom();
+                }, { passive: true });
+                
+                fullscreenCanvasContainer.addEventListener('touchend', () => {
+                    isTouching = false;
+                });
+            }
+
+            // ---------- 绑定事件 ----------
+            function bindEvents() {
+                themeToggle.addEventListener('click', toggleTheme);
+
+                helpBtn.addEventListener('click', openHelp);
+                helpCloseBtn.addEventListener('click', closeHelp);
+                helpGotItBtn.addEventListener('click', closeHelp);
+                
+                helpOverlay.addEventListener('click', (e) => {
+                    if (e.target === helpOverlay) {
+                        closeHelp();
+                    }
+                });
+
+                playPauseBtn.addEventListener('click', togglePlayPause);
+                resetBtn.addEventListener('click', resetToFirstFrame);
+                
+                prevFrameBtn.addEventListener('click', () => {
+                    if (!frames.length) return;
+                    if (isPlaying) pausePlayback();
+                    renderFrame(currentFrame - 1);
+                });
+                
+                nextFrameBtn.addEventListener('click', () => {
+                    if (!frames.length) return;
+                    if (isPlaying) pausePlayback();
+                    renderFrame(currentFrame + 1);
+                });
+                
+                fpsSlider.addEventListener('input', (e) => {
+                    setFps(parseInt(e.target.value, 10));
+                });
+                
+                fileInput.addEventListener('change', handleFileSelect);
+                
+                fullscreenBtn.addEventListener('click', enterFullscreen);
+                fullscreenBtn2.addEventListener('click', enterFullscreen);
+                fullscreenCloseBtn.addEventListener('click', exitFullscreen);
+                
+                fsPlayPauseBtn.addEventListener('click', togglePlayPause);
+                fsResetBtn.addEventListener('click', resetToFirstFrame);
+                
+                fsPrevFrameBtn.addEventListener('click', () => {
+                    if (!frames.length) return;
+                    if (isPlaying) pausePlayback();
+                    renderFrame(currentFrame - 1);
+                });
+                
+                fsNextFrameBtn.addEventListener('click', () => {
+                    if (!frames.length) return;
+                    if (isPlaying) pausePlayback();
+                    renderFrame(currentFrame + 1);
+                });
+                
+                fsFpsSlider.addEventListener('input', (e) => {
+                    setFps(parseInt(e.target.value, 10));
+                });
+                
+                // 缩放事件
+                bindZoomEvents();
+                
+                // 窗口大小变化时重新计算适应比例（如果当前是适应状态）
+                window.addEventListener('resize', () => {
+                    if (isFullscreen && Math.abs(zoomScale - fitScale) < 0.001) {
+                        zoomToFit();
+                    }
+                });
+                
+                // 键盘快捷键
+                window.addEventListener('keydown', (e) => {
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                    
+                    if (e.key === 'i' || e.key === 'I') {
+                        e.preventDefault();
+                        toggleHelp();
+                        return;
+                    }
+                    
+                    if (e.key === 'Escape') {
+                        if (isHelpOpen) {
+                            e.preventDefault();
+                            closeHelp();
+                            return;
+                        }
+                        if (isFullscreen) {
+                            e.preventDefault();
+                            exitFullscreen();
+                            return;
+                        }
+                    }
+                    
+                    if (e.key === 't' || e.key === 'T') {
+                        e.preventDefault();
+                        toggleTheme();
+                        return;
+                    }
+                    
+                    if ((e.key === 'f' || e.key === 'F') && frames.length) {
+                        e.preventDefault();
+                        toggleFullscreen();
+                        return;
+                    }
+                    
+                    // 全屏模式下的缩放快捷键
+                    if (isFullscreen) {
+                        if (e.key === '+' || e.key === '=') {
+                            e.preventDefault();
+                            zoomIn();
+                            return;
+                        }
+                        if (e.key === '-' || e.key === '_') {
+                            e.preventDefault();
+                            zoomOut();
+                            return;
+                        }
+                        if (e.key === '0') {
+                            e.preventDefault();
+                            zoomToFit();
+                            return;
+                        }
+                        if (e.key === '1') {
+                            e.preventDefault();
+                            zoomToActual();
+                            return;
+                        }
+                    }
+                    
+                    if (!frames.length) return;
+                    
+                    switch (e.key) {
+                        case ' ':
+                            e.preventDefault();
+                            togglePlayPause();
+                            break;
+                        case 'ArrowLeft':
+                            e.preventDefault();
+                            if (isPlaying) pausePlayback();
+                            renderFrame(currentFrame - 1);
+                            break;
+                        case 'ArrowRight':
+                            e.preventDefault();
+                            if (isPlaying) pausePlayback();
+                            renderFrame(currentFrame + 1);
+                            break;
+                        case 'r':
+                        case 'R':
+                            e.preventDefault();
+                            resetToFirstFrame();
+                            break;
+                        default:
+                            break;
+                    }
+                });
+                
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        if (frames.length && !isFullscreen) {
+                            canvasWidth = 0;
+                            canvasHeight = 0;
+                            drawFrameToContext(ctx, canvas, currentFrame, 'normal');
+                        }
+                        if (isFullscreen) {
+                            drawFrameToContext(fsCtx, fullscreenCanvas, currentFrame, 'fullscreen');
+                        }
+                    }, 200);
+                });
+
+                window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+                    try {
+                        const saved = localStorage.getItem('frameAnimTheme');
+                        if (!saved) {
+                            setTheme(e.matches ? 'light' : 'dark');
+                        }
+                    } catch(err) {}
+                });
+            }
+
+            // ---------- 初始化 ----------
+            function init() {
+                loadSavedTheme();
+                setFps(fps);
+                setupDragAndDrop();
+                bindEvents();
+                
+                uploadArea.style.display = 'flex';
+                canvasWrapper.style.display = 'none';
+                controlsBar.style.display = 'none';
+                infoBar.style.display = 'none';
+                thumbnailStrip.classList.remove('visible');
+                
+                console.log('帧动画播放工具已启动');
+                console.log('快捷键: 空格播放/暂停, ←/→ 切帧, R重置, F全屏, ESC退出, T主题, I帮助');
+                console.log('全屏缩放: 滚轮缩放, 拖拽平移, +/− 缩放, 0 适应, 1 原始');
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>

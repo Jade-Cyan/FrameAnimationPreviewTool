@@ -1,0 +1,62 @@
+{
+  "name": "frameanimationpreviewtool",
+  "version": "1.0.0",
+  "description": "A simple tool for previewing frame animations.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "keywords": ["electron", "frame-animation", "preview"],
+  "author": "JC_BOX_Studio",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.jcboxstudio.faptool",
+    "productName": "Frame Animation Preview Tool",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "**/*.css",
+      "**/*.js",
+      "**/*.png",
+      "**/*.jpg",
+      "**/*.jpeg",
+      "**/*.gif",
+      "**/*.webp",
+      "**/*.svg",
+      "**/*.ico"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Frame Animation Preview Tool"
+    },
+    "portable": {
+      "artifactName": "Frame Animation Preview Tool-Portable-${version}.exe"
+    }
+  }
+}
