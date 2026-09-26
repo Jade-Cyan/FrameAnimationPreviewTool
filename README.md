@@ -2,7 +2,7 @@
 
 一个可视化帧动画播放工具，支持导入图片序列并逐帧预览。
 
-![截图](屏幕截图%202026-09-26%20125336.png)
+![截图](屏幕截图.png)
 
 ## ✨ 功能特性
 
@@ -17,6 +17,9 @@
 ## 📦 下载安装
 
 从 [Releases](https://github.com/Jade-Cyan/FrameAnimationPreviewTool/releases) 页面下载：
+
+- `Frame Animation Preview Tool Setup x.x.x.exe` — 安装版
+- `FrameAnimationPreviewTool-Portable-x.x.x.exe` — 便携版（免安装）
 
 ## 🚀 本地开发
 
