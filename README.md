@@ -1,5 +1,7 @@
 # Frame Animation Preview Tool
 
+中文|[English](README.en.md)
+
 一个可视化帧动画播放工具，支持导入图片序列并逐帧预览。
 
 ![截图](屏幕截图.png)
